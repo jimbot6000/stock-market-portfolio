@@ -13,15 +13,15 @@ function StockListItem(props) {
   const profitClass = stock.profit < 0 ? 'loss' : 'profit';
   
   return (
-    <tr className="flex">
-      <td>{stock.ticker}</td>
+    <tr className="">
+      <td className="text-right mr-8">{stock.ticker}</td>
       <td>{stock.name}</td>
       <td>{stock.shares}</td>
-      <td className="money flex-1">{purchasePriceStr}</td>
-      <td className="money flex-1">{purchaseValueStr}</td>
-      <td className="money flex-1">{currentPriceStr}</td>
-      <td className="money flex-1">{currentValueStr}</td>
-      <td className={"money flex-1 "+profitClass}>{profitStr}</td>
+      <td className="money">{purchasePriceStr}</td>
+      <td className="money">{purchaseValueStr}</td>
+      <td className="money">{currentPriceStr}</td>
+      <td className="money">{currentValueStr}</td>
+      <td className={"money "+profitClass}>{profitStr}</td>
     </tr>
   );
 }

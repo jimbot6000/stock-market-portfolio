@@ -35,8 +35,8 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <div>
+    <div className="App bg-slate-800 text-slate-50">
+      <div className="">
         <div className="card-header-color">
           <h4>{myName}'s Stock Portfolio</h4>
         </div>

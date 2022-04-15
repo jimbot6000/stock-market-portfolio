@@ -7,7 +7,7 @@ function StockList(props) {
   const sortedStockList = props.data.sort((a,b) => a.name < b.name ? -1 : 1); 
   
   return (
-    <table className="place-content-center flex-1 m-auto">
+    <table className="m-auto">
       <thead className="">
         <StockListHeader />
       </thead>
