@@ -14,14 +14,14 @@ function StockListItem(props) {
   
   return (
     <tr className="">
-      <td className="text-right mr-8">{stock.ticker}</td>
+      <td className="text-left mr-8">{stock.ticker}</td>
       <td>{stock.name}</td>
       <td>{stock.shares}</td>
-      <td className="money">{purchasePriceStr}</td>
-      <td className="money">{purchaseValueStr}</td>
-      <td className="money">{currentPriceStr}</td>
-      <td className="money">{currentValueStr}</td>
-      <td className={"money "+profitClass}>{profitStr}</td>
+      <td className="money text-right mr-8">{purchasePriceStr}</td>
+      <td className="money text-right mr-8">{purchaseValueStr}</td>
+      <td className="money text-right mr-8">{currentPriceStr}</td>
+      <td className="money text-right mr-8">{currentValueStr}</td>
+      <td className={"money text-right mr-8 "+profitClass}>{profitStr}</td>
     </tr>
   );
 }

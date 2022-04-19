@@ -37,14 +37,14 @@ function App() {
   return (
     <div className="App bg-slate-800 text-slate-50">
       <div className="">
-        <div className="card-header-color">
+        <div className="card-header-color text-xl my-4">
           <h4>{myName}'s Stock Portfolio</h4>
         </div>
         <div className="flex place-content-center">
           <StockList data={stockList} />
         </div>
-        <div>
-          <button size="sm" onClick={addStock}>Add stock</button>
+        <div className="w-11/12 relative">
+          <button className="bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-full border-slate-900 border-4 my-4 absolute right-0" onClick={addStock}>Add stock</button>
         </div>
       </div>
     </div>
