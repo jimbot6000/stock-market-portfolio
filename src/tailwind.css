@@ -466,6 +466,14 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-backdrop-sepia:  ;
 }
 
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
 .right-0 {
   right: 0px;
 }
@@ -485,6 +493,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .table {
   display: table;
+}
+
+.w-11\/12 {
+  width: 91.666667%;
 }
 
 .w-10\/12 {
