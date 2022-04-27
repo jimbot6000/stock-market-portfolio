@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-import sampleData from './sampleData';
 import StockList from './StockList';
 
 function App() {
@@ -21,30 +20,31 @@ function App() {
     cache: 'default'
   };
 
-  fetch(AWS_API_GATEWAY_GET_PORTFOLIO, options)
-    .then(function (response) {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(function (response) {
-      console.log(response);
-      let stockList = response.Items.map(item => {
-        return {
-          "name": item.name.S,
-          "ticker": item.ticker.S,
-          "purchasePrice": item.purchasePrice.N,
-          "shares": item.shares.N
-        };
-      });
-    
-      setStocks(stockList)
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
-
+  useEffect(() => {
+    fetch(AWS_API_GATEWAY_GET_PORTFOLIO, options)
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(function (response) {
+        console.log(response);
+        let stockList = response.Items.map(item => {
+          return {
+            "name": item.name.S,
+            "ticker": item.ticker.S,
+            "purchasePrice": item.purchasePrice.N,
+            "shares": item.shares.N
+          };
+        });
+      
+        setStocks(stockList)
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+  }, []);
   
 
   // With the stock data add purchase value, current price
