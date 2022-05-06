@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import StockList from './StockList';
+import Utilities from './utilities';
 
 function App() {
 
@@ -69,7 +70,7 @@ function App() {
 
   useEffect(getPortfolio, []);
 
-  useEffect(() => {setTickerList(createTickerList(stocks))}, [stocks])
+  useEffect(() => {setTickerList(createTickerList(stocks))}, [stocks]);
 
   useEffect(() => {
     let promises = tickerList.map(ticker => getStockPrice(ticker));
@@ -83,12 +84,26 @@ function App() {
           }
           obj[stock.ticker] = info;
           return obj;
-        }, {});  
+        }, {});
         setStockPrices(stockPrices);
         console.log(stockPrices);
       })
-  }, [tickerList])
+  }, [tickerList]);
   
+  useEffect(() => {
+    setPortfolioData(stocks.map(val => {
+      let info = stockPrices[val.ticker];
+      return {
+        "ticker": val.ticker,
+        "shares": val.shares,
+        "purchasePrice": val.purchasePrice,
+        "name": info.name,
+        "currentPrice": info.price
+      }
+
+    }))
+  }, [stocks, stockPrices]);
+
   return (
     <div className="App bg-slate-800 text-slate-50">
       <div className="">
