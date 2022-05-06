@@ -10,18 +10,36 @@ function App() {
 
   const AWS_API_GATEWAY = 'https://gor5c0brhk.execute-api.us-east-1.amazonaws.com/prod/';
   const AWS_API_GATEWAY_GET_PORTFOLIO = AWS_API_GATEWAY + '/get-portfolio';
+  const AWS_API_GATEWAY_GET_STOCK_PRICE = AWS_API_GATEWAY + '/get-stock-price';
 
   const [stocks, setStocks] = useState([]);
   const [stockList, setStockList] = useState([]);
+  const [stockPrices, setStockPrices] = useState([]);
+  const [tickerList, setTickerList] = useState([]);
+  const [portfolioData, setPortfolioData] = useState([]);
 
-  // Retrieve the current stock information when the page first loads
-  const options = {
-    method: 'POST',
-    cache: 'default'
-  };
+  const createTickerList = portfolio => {
+    return portfolio.map(val => val.ticker);
+  }
 
-  useEffect(() => {
-    fetch(AWS_API_GATEWAY_GET_PORTFOLIO, options)
+  const getStockPrice = ticker => {
+    return fetch(AWS_API_GATEWAY_GET_STOCK_PRICE, {
+      method: 'POST',
+      cache: 'default',
+      body: JSON.stringify({ticker: ticker})
+    }).then(function (response) {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+  }
+
+  const getPortfolio = () => {
+    fetch(AWS_API_GATEWAY_GET_PORTFOLIO, {
+      method: 'POST',
+      cache: 'default'
+    })
       .then(function (response) {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -32,7 +50,6 @@ function App() {
         console.log(response);
         let stockList = response.Items.map(item => {
           return {
-            "name": item.name.S,
             "ticker": item.ticker.S,
             "purchasePrice": item.purchasePrice.N,
             "shares": item.shares.N
@@ -44,26 +61,34 @@ function App() {
       .catch(function (error) {
         console.log(error);
       })
-  }, []);
-  
-
-  // With the stock data add purchase value, current price
-  // and current value to the stock record
-  useEffect(() => {
-    const enhancedStocks = stocks.map(stock => {
-      stock.purchaseValue = stock.shares * stock.purchasePrice;
-      stock.currentPrice = Math.random() * 200 + 50;
-      stock.currentValue = stock.shares * stock.currentPrice;
-      stock.profit = stock.currentValue - stock.purchaseValue;
-      return stock;
-    })
-    setStockList(enhancedStocks);
-  }, [stocks])
+  }
 
   const addStock = evt => {
     console.log('add stock clicked');
   }
 
+  useEffect(getPortfolio, []);
+
+  useEffect(() => {setTickerList(createTickerList(stocks))}, [stocks])
+
+  useEffect(() => {
+    let promises = tickerList.map(ticker => getStockPrice(ticker));
+    Promise.all(promises)
+      .then(stocks => {
+        console.log(stocks);
+        const stockPrices = stocks.reduce((obj, stock) => {
+          const info = {
+            name: stock.data ? stock.data.longName : null,
+            price: stock.data ? stock.data.regularMarketPrice : null
+          }
+          obj[stock.ticker] = info;
+          return obj;
+        }, {});  
+        setStockPrices(stockPrices);
+        console.log(stockPrices);
+      })
+  }, [tickerList])
+  
   return (
     <div className="App bg-slate-800 text-slate-50">
       <div className="">
