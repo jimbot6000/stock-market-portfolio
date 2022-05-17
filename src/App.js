@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import StockList from './StockList';
+import utilities from './utilities';
 import Utilities from './utilities';
 
 function App() {
@@ -48,7 +49,6 @@ function App() {
         return response.json();
       })
       .then(function (response) {
-        console.log(response);
         let stockList = response.Items.map(item => {
           return {
             "ticker": item.ticker.S,
@@ -56,8 +56,7 @@ function App() {
             "shares": item.shares.N
           };
         });
-      
-        setStocks(stockList)
+        setStocks(stockList);
       })
       .catch(function (error) {
         console.log(error);
@@ -70,23 +69,21 @@ function App() {
 
   useEffect(getPortfolio, []);
 
-  useEffect(() => {setTickerList(createTickerList(stocks))}, [stocks]);
+  useEffect(() => {setTickerList(createTickerList(stocks))}, [stocks, stockPrices]);
 
   useEffect(() => {
     let promises = tickerList.map(ticker => getStockPrice(ticker));
     Promise.all(promises)
       .then(stocks => {
-        console.log(stocks);
-        const stockPrices = stocks.reduce((obj, stock) => {
+        let stockPrices = stocks.reduce((obj, stock) => {
           const info = {
             name: stock.data ? stock.data.longName : null,
             price: stock.data ? stock.data.regularMarketPrice : null
           }
           obj[stock.ticker] = info;
           return obj;
-        }, {});
+        }, []);
         setStockPrices(stockPrices);
-        console.log(stockPrices);
       })
   }, [tickerList]);
   
@@ -98,9 +95,14 @@ function App() {
         "shares": val.shares,
         "purchasePrice": val.purchasePrice,
         "name": info.name,
-        "currentPrice": info.price
+        "currentPrice": info.price,
+        "currentValue": info.price * val.shares,
+        "purchaseValue": info.purchasePrice * val.shares,
+        "profit": (info.price - val.purchasePrice) * val.shares,
+        "formattedPurchaseValue": utilities.formatNumber(info.purchasePrice * val.shares),
+        "formattedCurrentValue": utilities.formatNumber(info.price * val.shares),
+        "formattedProfit": utilities.formatNumber((info.price - val.purchasePrice) * val.shares)
       }
-
     }))
   }, [stocks, stockPrices]);
 
