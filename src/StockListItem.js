@@ -1,3 +1,4 @@
+import { MdDeleteForever } from 'react-icons/md';
 import utilities from './utilities';
 
 function StockListItem(props) {
@@ -8,7 +9,12 @@ function StockListItem(props) {
   
   return (
     <tr className="">
-      <td className="text-left mr-8">{stock.ticker}</td>
+      <td className="content-center">
+        <div className="bg-red-700 hover:bg-red-600 rounded-full border-2 border-red-900" onClick={deleteStock}>
+          <MdDeleteForever className="mx-auto"></MdDeleteForever>
+        </div>
+      </td>
+      <td className="text-left absolute ml-2 my-auto">{stock.ticker}</td>
       <td>{stock.name}</td>
       <td>{stock.shares}</td>
       <td className="money text-right mr-8">{stock.purchasePrice}</td>

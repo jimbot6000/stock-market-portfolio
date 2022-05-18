@@ -15,7 +15,6 @@ function App() {
   const AWS_API_GATEWAY_GET_STOCK_PRICE = AWS_API_GATEWAY + '/get-stock-price';
 
   const [stocks, setStocks] = useState([]);
-  const [stockList, setStockList] = useState([]);
   const [stockPrices, setStockPrices] = useState([]);
   const [tickerList, setTickerList] = useState([]);
   const [portfolioData, setPortfolioData] = useState([]);
@@ -67,9 +66,13 @@ function App() {
     console.log('add stock clicked');
   }
 
+  const deleteStock = evt => {
+    console.log('delete stock clicked')
+  }
+
   useEffect(getPortfolio, []);
 
-  useEffect(() => {setTickerList(createTickerList(stocks))}, [stocks, stockPrices]);
+  useEffect(() => {setTickerList(createTickerList(stocks))}, [stocks]);
 
   useEffect(() => {
     let promises = tickerList.map(ticker => getStockPrice(ticker));
@@ -97,14 +100,14 @@ function App() {
         "name": info.name,
         "currentPrice": info.price,
         "currentValue": info.price * val.shares,
-        "purchaseValue": info.purchasePrice * val.shares,
+        "purchaseValue": val.purchasePrice * val.shares,
         "profit": (info.price - val.purchasePrice) * val.shares,
-        "formattedPurchaseValue": utilities.formatNumber(info.purchasePrice * val.shares),
+        "formattedPurchaseValue": utilities.formatNumber(val.purchasePrice * val.shares),
         "formattedCurrentValue": utilities.formatNumber(info.price * val.shares),
         "formattedProfit": utilities.formatNumber((info.price - val.purchasePrice) * val.shares)
       }
     }))
-  }, [stocks, stockPrices]);
+  }, [stockPrices]);
 
   return (
     <div className="App bg-slate-800 text-slate-50">
@@ -113,10 +116,10 @@ function App() {
           <h4>{myName}'s Stock Portfolio</h4>
         </div>
         <div className="flex place-content-center">
-          <StockList data={stockList} />
+          <StockList data={portfolioData} />
         </div>
         <div className="w-11/12 relative">
-          <button className="bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-full border-slate-900 border-4 my-4 absolute right-0" onClick={addStock}>Add stock</button>
+          <button className="bg-green-700 hover:bg-green-600 px-3 py-2 rounded-full border-green-900 border-4 my-4 absolute right-0" onClick={addStock}>Add stock</button>
         </div>
       </div>
     </div>

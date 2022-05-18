@@ -14,6 +14,7 @@ function StockListTotals(props) {
 
   return (
     <tr className="border-t-4 border-slate-900">
+      <th></th>
       <th>TOTALS</th>
       <th colSpan="3">&nbsp;</th>
       <th className="money text-right mr-8">{utilities.formatNumber(totals.purchaseValue)}</th>
