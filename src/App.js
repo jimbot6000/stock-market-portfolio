@@ -66,10 +66,6 @@ function App() {
     console.log('add stock clicked');
   }
 
-  const deleteStock = evt => {
-    console.log('delete stock clicked')
-  }
-
   useEffect(getPortfolio, []);
 
   useEffect(() => {setTickerList(createTickerList(stocks))}, [stocks]);
@@ -116,7 +112,7 @@ function App() {
           <h4>{myName}'s Stock Portfolio</h4>
         </div>
         <div className="flex place-content-center">
-          <StockList data={portfolioData} />
+          <StockList data={portfolioData} getPortfolio={getPortfolio}/>
         </div>
         <div className="w-11/12 relative">
           <button className="bg-green-700 hover:bg-green-600 px-3 py-2 rounded-full border-green-900 border-4 my-4 absolute right-0" onClick={addStock}>Add stock</button>
