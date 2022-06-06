@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import StockList from './StockList';
 import utilities from './utilities';
-import Utilities from './utilities';
+import AddStockForm from './AddStockForm'
 
 function App() {
 
@@ -18,6 +18,7 @@ function App() {
   const [stockPrices, setStockPrices] = useState([]);
   const [tickerList, setTickerList] = useState([]);
   const [portfolioData, setPortfolioData] = useState([]);
+  const [showAddStockForm, setShowAddStockForm] = useState(false);
 
   const createTickerList = portfolio => {
     return portfolio.map(val => val.ticker);
@@ -64,6 +65,7 @@ function App() {
 
   const addStock = evt => {
     console.log('add stock clicked');
+    setShowAddStockForm(value => !value);
   }
 
   useEffect(getPortfolio, []);
@@ -105,7 +107,7 @@ function App() {
     }))
   }, [stockPrices]);
 
-  return (
+  return showAddStockForm ? <AddStockForm getPortfolio={getPortfolio} addStock={addStock}></AddStockForm> : (
     <div className="App bg-slate-800 text-slate-50">
       <div className="">
         <div className="card-header-color text-xl my-4">
